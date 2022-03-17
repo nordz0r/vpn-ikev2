@@ -75,6 +75,11 @@ sudo aa-complain /usr/lib/ipsec/stroke
 cat /etc/letsencrypt/live/$DOMAIN/chain.pem > /etc/ipsec.d/cacerts/ca.pem
 ```
 
+### Start
+```
+sudo ipsec restart
+sudo update-rc.d ipsec defaults
+```
 
 ## TODO
 - [ ] Create an executable script for automatic installation
