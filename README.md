@@ -17,9 +17,9 @@ sudo apt install -y strongswan strongswan-pki libcharon-extra-plugins python3-ce
 
 
 ### Variables 
-$DOMAIN is your domain name
-$USER is your username
-$PASSWORD is your password
+* $DOMAIN is your domain name
+* $USER is your username
+* $PASSWORD is your password
 
 ### Get certificate for $DOMAIN
 ```
