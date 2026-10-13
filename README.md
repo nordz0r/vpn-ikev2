@@ -1,32 +1,43 @@
-## VPN IKEv2 Server with Let`s Encrypt certificates
-Tested on Debian 10/11
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/banner-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset=".github/assets/banner-light.svg">
+    <img alt="nordz0r/vpn-ikev2 — VPN-сервер IKEv2" src=".github/assets/banner-light.svg" width="100%">
+  </picture>
+</p>
 
-## Requirements
-### Open Firewall ports: 
-* `UDP/500` `UDP/4500` (StrongSWAN)
-* `TCP/80` (certbot)
+<p align="center"><b>Русский</b> · <a href="README.en.md">English</a></p>
 
-### Domain name 
-* Pesonal domain like vpn.domain.com
+<p align="center">
+  <img alt="StrongSwan" src="https://img.shields.io/badge/StrongSwan-IKEv2-4d4d4d?style=flat-square">
+  <img alt="Lets Encrypt" src="https://img.shields.io/badge/Let%27s_Encrypt-certbot-003a70?style=flat-square&logo=letsencrypt&logoColor=white">
+  <img alt="Debian" src="https://img.shields.io/badge/Debian-10%2F11-a81d33?style=flat-square&logo=debian&logoColor=white">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square"></a>
+</p>
 
-### Install Packages
+Ручная настройка VPN-сервера IKEv2 на StrongSwan с сертификатом Let's Encrypt и клиентами по EAP-MSCHAPv2 (логин/пароль). Проверено на Debian 10/11.
+
+## Требования
+
+- Открытые порты: `UDP/500`, `UDP/4500` (StrongSwan), `TCP/80` (certbot)
+- Свой домен, например `vpn.domain.com`
+
+## Установка
+
 ```
-sudo apt update 
+sudo apt update
 sudo apt install -y strongswan strongswan-pki libcharon-extra-plugins python3-certbot-apache
 ```
 
+Переменные ниже: `$DOMAIN` — ваш домен, `$USER` — имя пользователя, `$PASSWORD` — пароль.
 
-### Variables 
-* $DOMAIN is your domain name
-* $USER is your username
-* $PASSWORD is your password
+Получить сертификат для `$DOMAIN`:
 
-### Get certificate for $DOMAIN
 ```
 certbot certonly --apache -d $DOMAIN --register-unsafely-without-email --agree-tos
 ```
 
-### Configs
+### Конфиги
 
 * /etc/ipsec.conf
 ```
@@ -64,10 +75,10 @@ conn $DOMAIN
 * /etc/ipsec.secrets
 ```
 $DOMAIN : RSA "/etc/letsencrypt/live/$DOMAIN/privkey.pem"
-$USER : EAP "$PASSOWRD"
+$USER : EAP "$PASSWORD"
 ```
 
-### Configure permissions strongswan to certificates
+### Доступ StrongSwan к сертификатам
 ```
 sudo apt install -y apparmor-utils
 sudo aa-complain /usr/lib/ipsec/charon
@@ -75,11 +86,19 @@ sudo aa-complain /usr/lib/ipsec/stroke
 cat /etc/letsencrypt/live/$DOMAIN/chain.pem > /etc/ipsec.d/cacerts/ca.pem
 ```
 
-### Start
+## Использование
+
 ```
 sudo ipsec restart
 sudo update-rc.d ipsec defaults
 ```
 
+Клиенты подключаются по IKEv2 к `$DOMAIN` с `$USER` / `$PASSWORD` и получают адрес из `10.10.10.0/24`, DNS `1.1.1.1`.
+
 ## TODO
-- [ ] Create an executable script for automatic installation
+
+- [ ] Скрипт автоматической установки
+
+## Лицензия
+
+MIT, см. [LICENSE](LICENSE).
