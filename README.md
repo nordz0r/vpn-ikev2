@@ -17,6 +17,14 @@
 
 Ручная настройка VPN-сервера IKEv2 на StrongSwan с сертификатом Let's Encrypt и клиентами по EAP-MSCHAPv2 (логин/пароль). Проверено на Debian 10/11.
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/architecture-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset=".github/assets/architecture-light.svg">
+    <img alt="VPN IKEv2: клиент → StrongSwan (ipsec.conf, сертификат Let's Encrypt от certbot) → интернет" src=".github/assets/architecture-light.svg" width="100%">
+  </picture>
+</p>
+
 ## Требования
 
 - Открытые порты: `UDP/500`, `UDP/4500` (StrongSwan), `TCP/80` (certbot)

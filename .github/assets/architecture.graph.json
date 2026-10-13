@@ -1,0 +1,203 @@
+{
+ "schemaVersion": "0.2.0",
+ "kind": "graph",
+ "id": "vpn-ikev2-architecture",
+ "generatedAt": "2026-10-13T18:00:00.000Z",
+ "title": "IKEv2 VPN setup",
+ "summary": "certbot gets a Let's Encrypt certificate; StrongSwan serves IKEv2 with EAP-MSCHAPv2 and hands clients 10.10.10.0/24.",
+ "lenses": [
+  "architecture"
+ ],
+ "layout": {
+  "direction": "right",
+  "laneOrder": [
+   "client",
+   "srv",
+   "ext"
+  ],
+  "rank": {
+   "cl": 1,
+   "ipsec": 1,
+   "conf": 0,
+   "cert": 2,
+   "certbot": 3,
+   "le": 3,
+   "net": 1
+  }
+ },
+ "provenance": {
+  "repo": {
+   "owner": "nordz0r",
+   "name": "vpn-ikev2",
+   "host": "github.com"
+  },
+  "base": {
+   "sha": "0000000000000000000000000000000000000000",
+   "ref": "main"
+  },
+  "head": {
+   "sha": "0000000000000000000000000000000000000000",
+   "ref": "main"
+  },
+  "generator": {
+   "name": "manual",
+   "version": "1.0.0"
+  }
+ },
+ "lanes": [
+  {
+   "id": "client",
+   "label": "Clients",
+   "subtitle": "IKEv2",
+   "order": 0
+  },
+  {
+   "id": "srv",
+   "label": "Debian server",
+   "subtitle": "StrongSwan",
+   "order": 1
+  },
+  {
+   "id": "ext",
+   "label": "External",
+   "subtitle": "internet",
+   "order": 2
+  }
+ ],
+ "nodes": [
+  {
+   "id": "cl",
+   "label": "VPN client",
+   "kind": "ui",
+   "delta": "unchanged",
+   "lane": "client",
+   "subtitle": "$USER / $PASSWORD",
+   "files": [],
+   "badges": []
+  },
+  {
+   "id": "ipsec",
+   "label": "StrongSwan charon",
+   "kind": "service",
+   "delta": "unchanged",
+   "lane": "srv",
+   "subtitle": "UDP 500 / 4500",
+   "files": [],
+   "badges": []
+  },
+  {
+   "id": "conf",
+   "label": "ipsec.conf + secrets",
+   "kind": "config",
+   "delta": "unchanged",
+   "lane": "srv",
+   "subtitle": "EAP-MSCHAPv2, 10.10.10.0/24",
+   "files": [],
+   "badges": []
+  },
+  {
+   "id": "cert",
+   "label": "Let's Encrypt cert",
+   "kind": "datastore",
+   "delta": "unchanged",
+   "lane": "srv",
+   "subtitle": "/etc/letsencrypt/live/$DOMAIN",
+   "files": [],
+   "badges": []
+  },
+  {
+   "id": "certbot",
+   "label": "certbot --apache",
+   "kind": "job",
+   "delta": "unchanged",
+   "lane": "srv",
+   "subtitle": "TCP 80",
+   "files": [],
+   "badges": []
+  },
+  {
+   "id": "le",
+   "label": "Let's Encrypt",
+   "kind": "external",
+   "delta": "unchanged",
+   "lane": "ext",
+   "subtitle": "ACME",
+   "files": [],
+   "badges": []
+  },
+  {
+   "id": "net",
+   "label": "Internet",
+   "kind": "external",
+   "delta": "unchanged",
+   "lane": "ext",
+   "subtitle": "DNS 1.1.1.1",
+   "files": [],
+   "badges": []
+  }
+ ],
+ "edges": [
+  {
+   "id": "e0",
+   "from": "cl",
+   "to": "ipsec",
+   "kind": "rpc",
+   "delta": "unchanged",
+   "label": "IKEv2",
+   "emphasis": "hero",
+   "animated": true,
+   "files": []
+  },
+  {
+   "id": "e1",
+   "from": "conf",
+   "to": "ipsec",
+   "kind": "dependency",
+   "delta": "unchanged",
+   "emphasis": "normal",
+   "animated": true,
+   "files": []
+  },
+  {
+   "id": "e2",
+   "from": "cert",
+   "to": "ipsec",
+   "kind": "data",
+   "delta": "unchanged",
+   "emphasis": "normal",
+   "animated": true,
+   "files": []
+  },
+  {
+   "id": "e3",
+   "from": "certbot",
+   "to": "le",
+   "kind": "http",
+   "delta": "unchanged",
+   "emphasis": "muted",
+   "animated": false,
+   "files": []
+  },
+  {
+   "id": "e4",
+   "from": "certbot",
+   "to": "cert",
+   "kind": "data",
+   "delta": "unchanged",
+   "emphasis": "normal",
+   "animated": true,
+   "files": []
+  },
+  {
+   "id": "e5",
+   "from": "ipsec",
+   "to": "net",
+   "kind": "data",
+   "delta": "unchanged",
+   "emphasis": "hero",
+   "animated": true,
+   "files": []
+  }
+ ],
+ "flows": []
+}
